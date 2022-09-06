@@ -1,0 +1,46 @@
+[
+
+{ 
+    "id":1,
+    "key": 3, 
+    "text": "Gamma", 
+    "color": "lightgreen", 
+    "isGroup": true,
+    "loc": "100 150"
+},
+{ 
+    
+    "id":2,
+    "key": 4, 
+    "text": "Delta", 
+    "color": "pink", 
+    "isGroup": true 
+},
+{  
+    
+    "id":3,
+    "key": 5, 
+    "text": "node2", 
+    "color": "blue", 
+    "group": 3 
+},
+{   
+    "id":4,
+    "key": 6, 
+    "text": "node3", 
+    "color": "red",
+    "group": 4 
+},
+{ 
+    "id":412,
+    "key": 8, 
+    "text": "node4", 
+    "color": "yellow"
+},
+{ 
+    "id":12124,
+    "key": 9, 
+    "text": "node5", 
+    "color": "green" 
+}
+]

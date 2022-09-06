@@ -1,0 +1,9 @@
+    <div class="card" style="width: 18rem; margin: 10px auto; box-shadow: -9px -3px 38px -19px rgba(0,0,0,0.73);" *ngFor="let i of item">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><span style="font-weight: 600;">Key :</span> {{i.key}}</li>
+        <li class="list-group-item"><span style="font-weight: 600;">Text :</span> {{i.text}}</li>
+        <li class="list-group-item"><span style="font-weight: 600;">Color :</span> {{i.color}}</li>
+        <!-- <li class="list-group-item"><span style="font-weight: 600;">Group :</span> {{i.group ? i.group : false }}</li> -->
+        <li class="list-group-item"><span style="font-weight: 600;">IsGroup :</span> {{i.isGroup ? i.isGroup : false }}</li>
+      </ul>
+    </div>
