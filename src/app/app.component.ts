@@ -760,29 +760,21 @@ export class AppComponent {
       let linkConnected = newDatafrom.linksConnected.xb.s.forEach(element => {
         let checkConnectedFrom = element.data.from
         this.checkConnectedTo = element.data.to
-
+        let newDataTo =   this.myDiagram.findNodeForKey( this.checkConnectedTo) as any;
+        var itTo = newDataTo.memberParts;
+        while (itTo.next()) {
+          var itemTo = itTo.value
+          var itemFromData = itemTo.data
+          if(itemFromData.finder === itemNew.finder ){
+            var itemKey = itemFromData.key
+            let newDataFind =   this.myDiagram.findNodeForKey( itemKey) as any;
+            this.myDiagram.startTransaction();
+            this.myDiagram.remove(newDataFind);
+            this.myDiagram.commitTransaction();
+           }
+          }
       });
-      let newDataTo =   this.myDiagram.findNodeForKey( this.checkConnectedTo) as any;
-      var itTo = newDataTo.memberParts;
-      while (itTo.next()) {
-        var itemTo = itTo.value
-        var itemFromData = itemTo.data
-        if(itemFromData.finder === itemNew.finder ){
-          var itemKey = itemFromData.key
-          let newDataFind =   this.myDiagram.findNodeForKey( itemKey) as any;
-          this.myDiagram.startTransaction();
-          this.myDiagram.remove(newDataFind);
-          this.myDiagram.commitTransaction();
-          
-          // if(newDatafrom.memberParts.count === 1 ){
-          //   var link = this.myDiagram.links.first();
-          //   this.myDiagram.startTransaction("remove link");
-          //   this.myDiagram.remove(link);
-          //   this.myDiagram.commitTransaction("remove link");
-          // } 
-         
-         }
-        }
+      
       
       // if(itemNew.finder === item.finder && item.primary_key == 'FK'){
       //   var itemKey = item.key
