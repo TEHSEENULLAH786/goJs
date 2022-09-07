@@ -11,7 +11,7 @@ declare var Inspector: any;
   encapsulation: ViewEncapsulation.None
 })
 export class AppComponent {
-
+  tepjson = {} as any;
   nodeInspector = new Array<any>();
   constructor(public GojsServiceService: GojsServiceService) { }
   private myDiagram: go.Diagram = new go.Diagram();
@@ -19,7 +19,9 @@ export class AppComponent {
   nodeDataArray: any;
   getNodeArray: any;
   linkDataArray: any;
-
+  insertedProperties = [];
+  resultasas:boolean = false;
+  nodeArray = new Array<any>();
   ngOnInit() {
     const $ = go.GraphObject.make;
     this.myDiagram = $(go.Diagram, "myDiagramDiv",
@@ -71,10 +73,10 @@ export class AppComponent {
         portId: "", cursor: "pointer",
         fromLinkable: true,
         toLinkable: true,
-        fromLinkableSelfNode: true,
-        toLinkableSelfNode: true,
-        fromLinkableDuplicates: true,
-        toLinkableDuplicates: true
+        // fromLinkableSelfNode: true,
+        // toLinkableSelfNode: true,
+        // fromLinkableDuplicates: true,
+        // toLinkableDuplicates: true
       }))
       .add(new go.Panel("Vertical", {
         background: "transparent", areaBackground: "rgb(0,189,255,0.1)", defaultAlignment: go.Spot.Left,
@@ -152,10 +154,10 @@ export class AppComponent {
         portId: "", cursor: "pointer",
         fromLinkable: true,
         toLinkable: true,
-        fromLinkableSelfNode: true,
-        toLinkableSelfNode: true,
-        fromLinkableDuplicates: true,
-        toLinkableDuplicates: true
+        // fromLinkableSelfNode: true,
+        // toLinkableSelfNode: true,
+        // fromLinkableDuplicates: true,
+        // toLinkableDuplicates: true
       }))
       .add(new go.Panel("Vertical", {
         background: "transparent", areaBackground: "rgb(0,189,255,0.1)", defaultAlignment: go.Spot.Left,
@@ -225,10 +227,10 @@ export class AppComponent {
         })
         .add(new go.Shape({
           stroke: "rgb(0,189,255,0.0)", strokeWidth: 2, fromLinkable: true, toLinkable: true, portId: "", cursor: "pointer",
-          fromLinkableSelfNode: true,
-          toLinkableSelfNode: true,
-          fromLinkableDuplicates: true,
-          toLinkableDuplicates: true
+          // fromLinkableSelfNode: true,
+          // toLinkableSelfNode: true,
+          // fromLinkableDuplicates: true,
+          // toLinkableDuplicates: true
         }))
         .add(new go.Panel("Horizontal", { background: "rgb(0,189,255)" })
           .add(new go.Shape("Rectangle", { fill: "rgb(0,189,255)", stroke: null, width: 30, height: 20, alignment: go.Spot.Left }))
@@ -236,10 +238,10 @@ export class AppComponent {
             .add(new go.Shape("Rectangle", {
               fill: "#fff", stroke: null, width: 123, height: 20, alignment: go.Spot.Right, portId: "", cursor: "pointer", fromLinkable: true,
               toLinkable: true,
-              fromLinkableSelfNode: false,
-              toLinkableSelfNode: false,
-              fromLinkableDuplicates: true,
-              toLinkableDuplicates: true
+              // fromLinkableSelfNode: false,
+              // toLinkableSelfNode: false,
+              // fromLinkableDuplicates: true,
+              // toLinkableDuplicates: true
             })
               .bind("fill", "color")
             )
@@ -254,151 +256,11 @@ export class AppComponent {
               .bind(new go.Binding("text").makeTwoWay()))
           )
           .add(new go.Panel("Auto", { background: "#fff" })
-          .add(new go.Shape("Rectangle", {
-            fill: null, 
-            stroke: null, 
-            width: 15, 
-            height: 20, 
-            alignment: go.Spot.Right
-          })
-            .bind("fill", "color")
-          )
-          .add(new go.TextBlock(
-            {
-              margin: 3,
-              editable: true,
-              font: "6px sans-serif",
-              height: 10,
-              alignment: go.Spot.Left,
-            })
-            .bind('text','primary_key'))
-        )
-        )
-
-
-    var simpletemplate =
-      new go.Node("Auto",
-        {
-          mouseDrop: (e, node) => this.finishDrop(e, node),
-        })
-        .add(new go.Shape({
-          stroke: "rgb(0,189,255,0.0)", 
-          strokeWidth: 2, 
-          fromLinkable: true, 
-          toLinkable: true, 
-          portId: "", 
-          cursor: "pointer",
-          fromLinkableSelfNode: true,
-          toLinkableSelfNode: true,
-          fromLinkableDuplicates: true,
-          toLinkableDuplicates: true
-        }))
-        .add(new go.Panel("Horizontal", { background: "rgb(0,189,255)" })
-          .add(new go.Shape("Rectangle", { fill: "rgb(0,189,255)", stroke: null, width: 3, height: 20, alignment: go.Spot.Left }))
-          .add(new go.Panel("Auto", { background: "#fff" })
             .add(new go.Shape("Rectangle", {
-              fill: "#fff", 
-              stroke: null, 
-              width: 150, 
-              height: 20, 
-              alignment: go.Spot.Right, 
-              portId: "", 
-              cursor: "pointer", 
-              fromLinkable: true,
-              toLinkable: true,
-              fromLinkableSelfNode: false,
-              toLinkableSelfNode: false,
-              fromLinkableDuplicates: true,
-              toLinkableDuplicates: true
-            })
-              .bind("fill", "color")
-            )
-            .add(new go.TextBlock(
-              {
-                margin: 3,
-                editable: true,
-                font: "6px sans-serif",
-                height: 10,
-                alignment: go.Spot.Left,
-              })
-              .bind(new go.Binding("text").makeTwoWay())
-              .bind('text','PK'))
-          )
-          .add(new go.Panel("Auto", { background: "#fff" })
-          .add(new go.Shape("Rectangle", {
-            fill: null, 
-            stroke: null, 
-            width: 15, 
-            height: 20, 
-            alignment: go.Spot.Right
-          })
-            .bind("fill", "color")
-          )
-          .add(new go.TextBlock(
-            {
-              margin: 3,
-              editable: true,
-              font: "6px sans-serif",
-              height: 10,
-              alignment: go.Spot.Left,
-            })
-            .bind('text','primary_key'))
-        )
-        )
-
-  var detailedNew = new go.Node("Auto",
-          {
-            mouseDrop: (e, node) => this.finishDrop(e, node),
-          })
-          .add(new go.Shape({
-            stroke: "rgb(0,189,255,0.0)", 
-            strokeWidth: 2, 
-            fromLinkable: true, 
-            toLinkable: true, 
-            portId: "", 
-            cursor: "pointer",
-            fromLinkableSelfNode: true,
-            toLinkableSelfNode: true,
-            fromLinkableDuplicates: true,
-            toLinkableDuplicates: true
-          }))
-          .add(new go.Panel("Horizontal", { background: "rgb(0,189,255)" })
-            .add(new go.Shape("Rectangle", { fill: "rgb(0,189,255)", stroke: null, width: 3, height: 20, alignment: go.Spot.Left }))
-            .add(new go.Panel("Auto", { background: "#fff" })
-              .add(new go.Shape("Rectangle", {
-                fill: "#fff", 
-                stroke: null, 
-                width: 150, 
-                height: 20, 
-                alignment: go.Spot.Right, 
-                portId: "", 
-                cursor: "pointer", 
-                fromLinkable: true,
-                toLinkable: true,
-                fromLinkableSelfNode: false,
-                toLinkableSelfNode: false,
-                fromLinkableDuplicates: true,
-                toLinkableDuplicates: true
-              })
-                .bind("fill", "color")
-              )
-              .add(new go.TextBlock(
-                {
-                  margin: 3,
-                  editable: true,
-                  font: "6px sans-serif",
-                  height: 10,
-                  alignment: go.Spot.Left,
-                })
-                .bind(new go.Binding("text").makeTwoWay())
-                )
-            )
-            .add(new go.Panel("Auto", { background: "#fff" })
-            .add(new go.Shape("Rectangle", {
-              fill: null, 
-              stroke: null, 
-              width: 15, 
-              height: 20, 
+              fill: null,
+              stroke: null,
+              width: 15,
+              height: 20,
               alignment: go.Spot.Right
             })
               .bind("fill", "color")
@@ -411,9 +273,149 @@ export class AppComponent {
                 height: 10,
                 alignment: go.Spot.Left,
               })
-              .bind('text','foreign_key'))
+              .bind('text', 'primary_key'))
           )
+        )
+
+
+    var simpletemplate =
+      new go.Node("Auto",
+        {
+          mouseDrop: (e, node) => this.finishDrop(e, node),
+        })
+        .add(new go.Shape({
+          stroke: "rgb(0,189,255,0.0)",
+          strokeWidth: 2,
+          fromLinkable: true,
+          toLinkable: true,
+          portId: "",
+          cursor: "pointer",
+          // fromLinkableSelfNode: true,
+          // toLinkableSelfNode: true,
+          // fromLinkableDuplicates: true,
+          // toLinkableDuplicates: true
+        }))
+        .add(new go.Panel("Horizontal", { background: "rgb(0,189,255)" })
+          .add(new go.Shape("Rectangle", { fill: "rgb(0,189,255)", stroke: null, width: 3, height: 20, alignment: go.Spot.Left }))
+          .add(new go.Panel("Auto", { background: "#fff" })
+            .add(new go.Shape("Rectangle", {
+              fill: "#fff",
+              stroke: null,
+              width: 150,
+              height: 20,
+              alignment: go.Spot.Right,
+              portId: "",
+              cursor: "pointer",
+              fromLinkable: true,
+              toLinkable: true,
+              // fromLinkableSelfNode: false,
+              // toLinkableSelfNode: false,
+              // fromLinkableDuplicates: true,
+              // toLinkableDuplicates: true
+            })
+              .bind("fill", "color")
+            )
+            .add(new go.TextBlock(
+              {
+                margin: 3,
+                editable: true,
+                font: "6px sans-serif",
+                height: 10,
+                alignment: go.Spot.Left,
+              })
+              .bind(new go.Binding("text").makeTwoWay())
+              .bind('text', 'PK'))
           )
+          .add(new go.Panel("Auto", { background: "#fff" })
+            .add(new go.Shape("Rectangle", {
+              fill: null,
+              stroke: null,
+              width: 15,
+              height: 20,
+              alignment: go.Spot.Right
+            })
+              .bind("fill", "color")
+            )
+            .add(new go.TextBlock(
+              {
+                margin: 3,
+                editable: true,
+                font: "6px sans-serif",
+                height: 10,
+                alignment: go.Spot.Left,
+              })
+              .bind('text', 'primary_key'))
+          )
+        )
+
+    var detailedNew = new go.Node("Auto",
+      {
+        mouseDrop: (e, node) => this.finishDrop(e, node),
+      })
+      .add(new go.Shape({
+        stroke: "rgb(0,189,255,0.0)",
+        strokeWidth: 2,
+        fromLinkable: true,
+        toLinkable: true,
+        portId: "",
+        cursor: "pointer",
+        // fromLinkableSelfNode: true,
+        // toLinkableSelfNode: true,
+        // fromLinkableDuplicates: true,
+        // toLinkableDuplicates: true
+      }))
+      .add(new go.Panel("Horizontal", { background: "rgb(0,189,255)" })
+        .add(new go.Shape("Rectangle", { fill: "rgb(0,189,255)", stroke: null, width: 3, height: 20, alignment: go.Spot.Left }))
+        .add(new go.Panel("Auto", { background: "#fff" })
+          .add(new go.Shape("Rectangle", {
+            fill: "#fff",
+            stroke: null,
+            width: 150,
+            height: 20,
+            alignment: go.Spot.Right,
+            portId: "",
+            cursor: "pointer",
+            fromLinkable: true,
+            toLinkable: true,
+            // fromLinkableSelfNode: false,
+            // toLinkableSelfNode: false,
+            // fromLinkableDuplicates: true,
+            // toLinkableDuplicates: true
+          })
+            .bind("fill", "color")
+          )
+          .add(new go.TextBlock(
+            {
+              margin: 3,
+              editable: true,
+              font: "6px sans-serif",
+              height: 10,
+              alignment: go.Spot.Left,
+            })
+            .bind(new go.Binding("text").makeTwoWay())
+          )
+        )
+        .add(new go.Panel("Auto", { background: "#fff" })
+          .add(new go.Shape("Rectangle", {
+            fill: null,
+            stroke: null,
+            width: 15,
+            height: 20,
+            alignment: go.Spot.Right
+          })
+            .bind("fill", "color")
+          )
+          .add(new go.TextBlock(
+            {
+              margin: 3,
+              editable: true,
+              font: "6px sans-serif",
+              height: 10,
+              alignment: go.Spot.Left,
+            })
+            .bind('text', 'foreign_key'))
+        )
+      )
 
 
     var templmap = new go.Map<string, go.Node>() // In TypeScript you could write: new go.Map<string, go.Node>();
@@ -444,8 +446,8 @@ export class AppComponent {
       });
 
     this.myPalette.model = new go.GraphLinksModel([
-      { isGroup: true, text: "H Group", horiz: true, category:"simpleGroup" },
-      { isGroup: true, text: "H Group", horiz: true, category:"detailedGroup" },
+      { isGroup: true, text: "H Group", horiz: true, category: "simpleGroup" },
+      { isGroup: true, text: "H Group", horiz: true, category: "detailedGroup" },
       { text: "New Node", color: "white", category: "detailed" },
       { text: "New Node", color: "white", category: "simple" }
     ]);
@@ -454,12 +456,15 @@ export class AppComponent {
 
     this.myDiagram.toolManager.linkingTool.linkValidation = this.sameGroup;
     this.myDiagram.toolManager.relinkingTool.linkValidation = this.sameGroup;
-    this.myDiagram.toolManager.relinkingTool.linkValidation = this.sameGroup;
 
     this.nodeDataArray = [
-      { key: 3, text: "Gamma", color: "lightgreen", isGroup: true, category: "detailedGroup",  primary_key: 'PK' },
+      { key: 3, text: "Gamma", color: "lightgreen", isGroup: true, category: "detailedGroup", primary_key: 'PK' },
       { key: 4, text: "Delta", color: "grey", isGroup: true, category: "simpleGroup" },
-      { key: 5, text: "node1", color: "pink", group: 3, category: "simple", primary_key: 'PK' },
+      { key: 5, text: "node1", color: "pink", group: 3, category: "simple", primary_key: 'PK', finder:'A1' },
+      { key: 6, text: "node99", color: "orange", group: 3, category: "simple", primary_key: 'PK', finder:'A3' },
+      { key: 30, text: "Gamma", color: "lightgreen", isGroup: true, category: "detailedGroup", primary_key: 'PK' },
+      { key: 50, text: "node1", color: "red", group: 30, category: "simple", primary_key: 'PK', finder:'A2' },
+
       // { key: 8, text: "node3", color: "yellow", category: "simple",},
       // { key: 9, text: "node4", color: "orange", category: "simple"}
     ];
@@ -483,46 +488,183 @@ export class AppComponent {
       var fromKeyAtt;
       var toKey = e.subject.toNode.key;
       var it = from.memberParts;
-        while (it.next()) {
-          var item = it.value;
-          fromKeyAtt = item.data.key
-          if (item.data.primary_key == "PK") {
+      var itOn = from.memberParts;
+      var itTo = to.memberParts
+      // while (itTo.next()) {
+      //   var toItem = itTo.value
+      //   while(itOn.next()){
+      //     var itemOf = itOn.value
+      //     if(itemOf.data.key === toItem.data.key){
+      //       this.resultasas = true
+      //     }
+      //   }
+      //   // if (this.nodeDataArray.filter(aaa => aaa.key === itTo.data.key).length > 0) {
+          
+      //       // this.myDiagram.toolManager.linkingTool.linkValidation = this.linkOnKey;
+      //       // let itrDeleted = this.myDiagram.findLinksByExample({ key:toItem.data.group })
+      //       // while (itrDeleted.next()) {
+      //       //   var link = itrDeleted.value;
+      //       //   this.myDiagram.remove(link)
+      //       // }
+      //     /* vendors contains the element we're looking for */
 
-            var new_key = 'FK'
-            // var itrnode = item.findNodesConnected();
-            // if (itrnode.count > 0) {
-            //   itrnode.each((b) => {
-            //     if (b.data.group == toKey) {
-            //     }
-            //   });
-            // }
-            var tepjson = {} as any;
+      //     // }
+      //   // else if(){
+      //   //   while(it.next()){
+      //   //     var ttem = it.value
+
+      //   //     if(ttem.data.group != from.qb.key){
+      //   //       for (var x in ttem.data) {
+      //   //         this.tepjson[x] = ttem.data[x];
+      //   //       }
+      //   //       this.myDiagram.model.addNodeData({ category: this.tepjson?.category, color: this.tepjson.color, group: groupTo, key: this.tepjson.key, primary_key: new_key, text: this.tepjson.text })
+      //   //     }else{
+      //   //       this.resultasas = true
+      //   //     }
+      //   //   }
+      //   // }
+      // }
+      while (it.next()) {
+        var item = it.value;
+        fromKeyAtt = item.data.key
+        
+        if (item.data.primary_key == "PK") {
+
+          var new_key = 'FK'
+          // var itrnode = item.findNodesConnected();
+          // if (itrnode.count > 0) {
+          //   itrnode.each((b) => {
+          //     if (b.data.group == toKey) {
+          //     }
+          //   });
+          // }
+          // this.nodeDataArray.forEach((element, i) => {
+          //   this.nodeArray.push(this.nodeDataArray[i])
+          // });
+          // let result = this.nodeDataArray.includes(item.data.key);
+          if(!this.resultasas){
             for (var x in item.data) {
-              tepjson[x] = item.data[x];
+              this.tepjson[x] = item.data[x];
             }
-    
-            // prop_primary.push(tepjson);
-            // pks.push(item.data.title);
-            // keys.push(item.data.key);
-            // dt_type.push(item.data.DT_type);
+            this.myDiagram.model.addNodeData({ category: this.tepjson?.category, color: this.tepjson.color, group: groupTo, key: this.tepjson.key, primary_key: new_key, text: this.tepjson.text, finder:this.tepjson.finder })
+            this.resultasas = false
           }
+          
+
+          // prop_primary.push(this.tepjson);
+          // pks.push(item.data.title);
+          // keys.push(item.data.key);
+          // dt_type.push(item.data.DT_type);
         }
+        this.nodeDataArray
+        
+
+      }
 
       // //console.log(e.subject);
-    
-      // this.myDiagram.model.addNodeData({ key: 6, text: "node2", color: "red", group: 4, category: "detailedNew", foreign_key:'FK' })
 
-      this.myDiagram.model.addNodeData({category: tepjson.category, color: tepjson.color, group:  groupTo, key: tepjson.key, primary_key: new_key, text: tepjson.text})
 
-      // { e.subject.category = "annotation"} 
-      // else if (e.subject.fromNode.category === "dataobject" || e.subject.toNode.category === "dataobject") 
-      // { e.subject.category = "data"} 
-      // else if (e.subject.fromNode.category === "datastore" || e.subject.toNode.category === "datastore") 
-      // { e.subject.category = "data"} 
-      // e.subject.data.points = e.subject.points
-      // this.myDiagram.modelUpdater.createObject(e.subject.data)
     }
     );
+    this.myDiagram.addDiagramListener('SelectionDeleting', (e) => {
+
+      var itr = e.subject.iterator;
+      let deletionList = []
+      let deletionListFromNode = []
+      // let localList = []
+      while (itr.next()) {
+        var item = itr.value;
+        console.log('partitem',item)
+        if (item) {
+          if(item.data.finder){
+            deletionListFromNode.push(item.data)
+            this.deleteFromNode(deletionListFromNode)
+
+          }
+          deletionList.push(item.data)
+        } 
+      }
+      if (deletionList.length > 0) {
+        this.deleteNode(deletionList, itr, e)
+      } 
+      // else 
+      // {
+      //   var iter = e.subject.iterator;
+      //   while (iter.next()) {
+      //     var item = iter.value;
+      //     if (item instanceof go.Link) {
+      //       this.removeChildLinks(item, e)
+      //     } else {
+
+
+      //       let itrOutOf = item.findLinksOutOf();
+      //       while (itrOutOf.next()) {
+
+      //         var items = itrOutOf.value;
+      //         this.removeChildLinks(items, e)
+      //       }
+
+      //     }
+
+      //     // if (item instanceof go.Node) {
+      //     //   if (this.insertedProperties.length > 0) {
+      //     //     for (let j = this.insertedProperties.length - 1; j >= 0; j--) {
+      //     //       if (this.insertedProperties[j]['stem_id'] == item.data['key']) {
+      //     //         this.insertedProperties.splice(j, 1);
+
+      //     //       }
+      //     //     }
+      //     //   }
+
+
+      //     // }
+      //   }
+
+
+      //   let itrDeleted = this.myDiagram.findLinksByExample({ "deleted": true })
+      //   while (itrDeleted.next()) {
+      //     var link = itrDeleted.value;
+      //     this.myDiagram.remove(link)
+      //   }
+      // }
+      // for (let i in localList) {
+      //   var item = localList[i];
+      //   if (item instanceof go.Link) {
+      //     this.removeChildLinks(item, e)
+      //   } else {
+
+
+      //     let itrOutOf = item.findLinksOutOf();
+      //     while (itrOutOf.next()) {
+
+      //       var items = itrOutOf.value;
+      //       this.removeChildLinks(items, e)
+      //     }
+
+      //   }
+        // }
+
+        // let itrDeleted = this.diagram.findLinksByExample({ "deleted": true })
+        // while (itrDeleted.next()) {
+        //   var link = itrDeleted.value;
+        //   this.diagram.remove(link)
+        // }
+
+
+
+        //     e.subject.each(function(part) {
+        //              if (part instanceof go.Link ) {
+
+        //               templateFunctions.removeChildLinks(part,e)
+
+        //              }})
+
+
+
+
+      // }
+    })
+
 
 
     new Inspector('myInspector', this.myDiagram,
@@ -541,7 +683,7 @@ export class AppComponent {
           // "Comments": { show: Inspector.showIfNode },
           // "LinkComments": { show: Inspector.showIfLink },
           "isGroup": { readOnly: true, show: Inspector.showIfPresent },
-          "primary_key":{show: Inspector.showIfPresent},
+          "primary_key": { show: Inspector.showIfPresent },
           // "flag": { show: Inspector.showIfNode, type: 'checkbox' },
           // "state": {
           //   show: Inspector.showIfNode,
@@ -557,78 +699,206 @@ export class AppComponent {
         }
       });
   }
+  removeChildLinks(part, e) {
 
-  showMessage(s: any) {
-    this.nodeInspector = []
-    this.nodeInspector.push(s)
-  }
-  finishDrop(e: any, grp: any) {
-    var ok = (grp !== null ? grp.addMembers(grp.diagram.selection, true) : e.diagram.commandHandler.addTopLevelParts(e.diagram.selection, true));
-    if (!ok) e.diagram.currentTool.doCancel();
-  }
+    part.data['deleted'] = true;
+    let to = part.data["to"]
+    let node = e.diagram.findNodeForKey(to)
+    if (node) {
+      let itr = node.findLinksOutOf()
+      if (itr.count > 0) {
+        while (itr.next()) {
+          var item = itr.value;
 
-  highlightGroup(e: any, grp: any, show: any) {
-    if (!grp) return;
-    e.handled = true;
-    if (show) {
-      // cannot depend on the grp.diagram.selection in the case of external drag-and-drops;
-      // instead depend on the DraggingTool.draggedParts or .copiedParts
-      var tool = grp.diagram.toolManager.draggingTool;
-      var map = tool.draggedParts || tool.copiedParts;
-      // this is a Map
-      // now we can check to see if the Group will accept membership of the dragged Parts
-      if (grp.canAddMembers(map.toKeySet())) {
-        grp.isHighlighted = true;
+          this.removeChildLinks(item, e)
+
+        }
+      } else {
+
         return;
       }
     }
-    grp.isHighlighted = false;
   }
+  deleteNode(list, itr, e) {
+    list.forEach((element, i) => {
+      var itemNew = list[i]
+      let newDataTo =   this.myDiagram.findNodeForKey( itemNew.from) as any;
+      var itFrom = newDataTo.memberParts;
+     
+      while (itFrom.next()) {
+        let newData =   this.myDiagram.findNodeForKey( itemNew.to) as any;
+        var it = newData.memberParts;
+        var itemFrom = itFrom.value
+        var itemFromData = itemFrom.data
+       
+      while(it.next()){
+        var item = it.value;
+        var item = item.data;
+        if(itemFromData.finder === item.finder && item.primary_key == 'FK'){
+          var itemKey = item.key
+          let newDataFind =   this.myDiagram.findNodeForKey( itemKey) as any;
+          this.nodeDataArray
+          this.myDiagram.startTransaction();
+          this.myDiagram.remove(newDataFind);
+          this.myDiagram.commitTransaction();
+    
+         }
+        }
+      }
+      //  if (item.primary_key == "FK") {
+       
+      // }
+    });
+  }
+  checkConnectedTo:any;
+  deleteFromNode(list) {
+    list.forEach((element, i) => {
+      var itemNew = list[i]
+      let newDatafrom =   this.myDiagram.findNodeForKey( itemNew.group) as any;
+      var itFrom = newDatafrom.memberParts;
+      console.log(newDatafrom)
+      let linkConnected = newDatafrom.linksConnected.xb.s.forEach(element => {
+        let checkConnectedFrom = element.data.from
+        this.checkConnectedTo = element.data.to
 
-  defaultColor(horiz: any) {
-    return horiz ? "rgb(0, 189, 255)" : "rgb(0, 189, 255)";
-  }
-  defaultFont(horiz: any) {
-    return horiz ? "12px sans-serif" : "bold 12px sans-serif";
-  }
+      });
+      let newDataTo =   this.myDiagram.findNodeForKey( this.checkConnectedTo) as any;
+      var itTo = newDataTo.memberParts;
+      while (itTo.next()) {
+        var itemTo = itTo.value
+        var itemFromData = itemTo.data
+        if(itemFromData.finder === itemNew.finder ){
+          var itemKey = itemFromData.key
+          let newDataFind =   this.myDiagram.findNodeForKey( itemKey) as any;
+          this.myDiagram.startTransaction();
+          this.myDiagram.remove(newDataFind);
+          this.myDiagram.commitTransaction();
+          
+          // if(newDatafrom.memberParts.count === 1 ){
+          //   var link = this.myDiagram.links.first();
+          //   this.myDiagram.startTransaction("remove link");
+          //   this.myDiagram.remove(link);
+          //   this.myDiagram.commitTransaction("remove link");
+          // } 
+         
+         }
+        }
+      
+      // if(itemNew.finder === item.finder && item.primary_key == 'FK'){
+      //   var itemKey = item.key
+        let newDataFind =   this.myDiagram.findNodeForKey( itemNew.key) as any;
+        this.nodeDataArray
+        this.myDiagram.startTransaction();
+        this.myDiagram.remove(newDataFind);
+        this.myDiagram.commitTransaction();
+  
+      //  }
 
-  makeLayout(horiz: any) {
-    if (horiz) {
-      return new go.GridLayout(
-        {
-          wrappingWidth: 1, alignment: go.GridLayout.Position,
-          cellSize: new go.Size(1, 1), spacing: new go.Size(4, 4)
-        });
-    } else {
-      return new go.GridLayout(
-        {
-          wrappingColumn: 1, alignment: go.GridLayout.Position,
-          cellSize: new go.Size(1, 1), spacing: new go.Size(4, 4)
-        });
+
+      // while (itFrom.next()) {
+      //   let newData =   this.myDiagram.findNodeForKey( itemNew.to) as any;
+      //   var it = newData.memberParts;
+      //   var itemFrom = itFrom.value
+      //   var itemFromData = itemFrom.data
+       
+      // while(it.next()){
+      //   var item = it.value;
+      //   var item = item.data;
+       
+      //   }
+      // }
+
+     
+      //  if (item.primary_key == "FK") {
+       
+      // }
+    });
+      
+
+
+  } 
+
+
+
+
+
+
+showMessage(s: any) {
+  this.nodeInspector = []
+  this.nodeInspector.push(s)
+}
+finishDrop(e: any, grp: any) {
+  var ok = (grp !== null ? grp.addMembers(grp.diagram.selection, true) : e.diagram.commandHandler.addTopLevelParts(e.diagram.selection, true));
+  if (!ok) e.diagram.currentTool.doCancel();
+}
+
+highlightGroup(e: any, grp: any, show: any) {
+  if (!grp) return;
+  e.handled = true;
+  if (show) {
+    // cannot depend on the grp.diagram.selection in the case of external drag-and-drops;
+    // instead depend on the DraggingTool.draggedParts or .copiedParts
+    var tool = grp.diagram.toolManager.draggingTool;
+    var map = tool.draggedParts || tool.copiedParts;
+    // this is a Map
+    // now we can check to see if the Group will accept membership of the dragged Parts
+    if (grp.canAddMembers(map.toKeySet())) {
+      grp.isHighlighted = true;
+      return;
     }
   }
+  grp.isHighlighted = false;
+}
 
-  linkInfo(d: any) {
-    return "Link:\nfrom " + d.from + " to " + d.to;
+defaultColor(horiz: any) {
+  return horiz ? "rgb(0, 189, 255)" : "rgb(0, 189, 255)";
+}
+defaultFont(horiz: any) {
+  return horiz ? "12px sans-serif" : "bold 12px sans-serif";
+}
+
+makeLayout(horiz: any) {
+  if (horiz) {
+    return new go.GridLayout(
+      {
+        wrappingWidth: 1, alignment: go.GridLayout.Position,
+        cellSize: new go.Size(1, 1), spacing: new go.Size(4, 4)
+      });
+  } else {
+    return new go.GridLayout(
+      {
+        wrappingColumn: 1, alignment: go.GridLayout.Position,
+        cellSize: new go.Size(1, 1), spacing: new go.Size(4, 4)
+      });
+  }
+}
+
+linkInfo(d: any) {
+  return "Link:\nfrom " + d.from + " to " + d.to;
+}
+
+sameGroup(fromnode: any, fromport: any, tonode: any, toport: any) {
+  return fromnode.data.isGroup === tonode.data.isGroup;
+
+}
+linkOnKey(fromnode: any, fromport: any, tonode: any, toport: any) {
+  return fromnode.data.isGroup === tonode.data.isGroup;
+
+}
+
+
+keyMake(fromnode: any, fromport: any, tonode: any, toport: any) {
+  if (fromnode.node.primary_key === 'PK') {
+    tonode.node.color = '#000'
   }
 
-  sameGroup(fromnode: any, fromport: any, tonode: any, toport: any) {
-    return fromnode.data.isGroup === tonode.data.isGroup;
+}
 
-  }
+getNode() {
+  this.GojsServiceService.getNode().subscribe((res: any) => {
+    this.getNodeArray = res;
+  })
 
-  keyMake(fromnode: any, fromport: any, tonode: any, toport: any) {
-    if(fromnode.node.primary_key === 'PK'){
-      tonode.node.color = '#000'
-    }
-
-  }
-
-  getNode() {
-    this.GojsServiceService.getNode().subscribe((res: any) => {
-      this.getNodeArray = res;
-    })
-
-  }
+}
 
 }
