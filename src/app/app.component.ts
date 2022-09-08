@@ -429,10 +429,10 @@ export class AppComponent {
 
     this.myDiagram.linkTemplate = $(go.Link, { toShortLength: 3, relinkableFrom: true, relinkableTo: true, routing: go.Link.AvoidsNodes },
       $(go.Shape,
-        { strokeWidth: 2 }),
-      $(go.Shape,
-        { toArrow: "Standard", stroke: null }),
-    );
+        { strokeWidth: 2 },
+        new go.Binding("stroke", "color")),
+        
+    ),
 
     this.linkDataArray = [
       // { from: 3, to: 4 },
@@ -452,21 +452,17 @@ export class AppComponent {
       { text: "New Node", color: "white", category: "simple" }
     ]);
 
-    // this.myDiagram.model.setDataProperty(Node.data, "primary_key", );
 
     this.myDiagram.toolManager.linkingTool.linkValidation = this.sameGroup;
     this.myDiagram.toolManager.relinkingTool.linkValidation = this.sameGroup;
 
     this.nodeDataArray = [
-      { key: 3, text: "Gamma", color: "lightgreen", isGroup: true, category: "detailedGroup", primary_key: 'PK' },
+      { key: 3, text: "Gamma", color: "lightgreen", isGroup: true, category: "detailedGroup"},
       { key: 4, text: "Delta", color: "grey", isGroup: true, category: "simpleGroup" },
-      { key: 5, text: "node1", color: "pink", group: 3, category: "simple", primary_key: 'PK', finder:'A1' },
-      { key: 6, text: "node99", color: "orange", group: 3, category: "simple", primary_key: 'PK', finder:'A3' },
-      { key: 30, text: "Gamma", color: "lightgreen", isGroup: true, category: "detailedGroup", primary_key: 'PK' },
-      { key: 50, text: "node1", color: "red", group: 30, category: "simple", primary_key: 'PK', finder:'A2' },
-
-      // { key: 8, text: "node3", color: "yellow", category: "simple",},
-      // { key: 9, text: "node4", color: "orange", category: "simple"}
+      { key: 5, text: "node1", color: "pink", group: 3, category: "simple", primary_key: 'PK' },
+      { key: 6, text: "node99", color: "orange", group: 3, category: "simple", primary_key: 'PK' },
+      { key: 30, text: "Gamma", color: "lightgreen", isGroup: true, category: "detailedGroup" },
+      { key: 50, text: "node1", color: "red", group: 30, category: "simple", primary_key: 'PK' },
     ];
 
     this.myDiagram.animationManager.isEnabled = false;
@@ -489,81 +485,69 @@ export class AppComponent {
       var toKey = e.subject.toNode.key;
       var it = from.memberParts;
       var itOn = from.memberParts;
-      var itTo = to.memberParts
-      // while (itTo.next()) {
-      //   var toItem = itTo.value
-      //   while(itOn.next()){
-      //     var itemOf = itOn.value
-      //     if(itemOf.data.key === toItem.data.key){
-      //       this.resultasas = true
-      //     }
-      //   }
-      //   // if (this.nodeDataArray.filter(aaa => aaa.key === itTo.data.key).length > 0) {
-          
-      //       // this.myDiagram.toolManager.linkingTool.linkValidation = this.linkOnKey;
-      //       // let itrDeleted = this.myDiagram.findLinksByExample({ key:toItem.data.group })
-      //       // while (itrDeleted.next()) {
-      //       //   var link = itrDeleted.value;
-      //       //   this.myDiagram.remove(link)
-      //       // }
-      //     /* vendors contains the element we're looking for */
-
-      //     // }
-      //   // else if(){
-      //   //   while(it.next()){
-      //   //     var ttem = it.value
-
-      //   //     if(ttem.data.group != from.qb.key){
-      //   //       for (var x in ttem.data) {
-      //   //         this.tepjson[x] = ttem.data[x];
-      //   //       }
-      //   //       this.myDiagram.model.addNodeData({ category: this.tepjson?.category, color: this.tepjson.color, group: groupTo, key: this.tepjson.key, primary_key: new_key, text: this.tepjson.text })
-      //   //     }else{
-      //   //       this.resultasas = true
-      //   //     }
-      //   //   }
-      //   // }
-      // }
+      var keyArray = []
       while (it.next()) {
         var item = it.value;
         fromKeyAtt = item.data.key
         
         if (item.data.primary_key == "PK") {
-
           var new_key = 'FK'
-          // var itrnode = item.findNodesConnected();
-          // if (itrnode.count > 0) {
-          //   itrnode.each((b) => {
-          //     if (b.data.group == toKey) {
-          //     }
-          //   });
-          // }
-          // this.nodeDataArray.forEach((element, i) => {
-          //   this.nodeArray.push(this.nodeDataArray[i])
-          // });
-          // let result = this.nodeDataArray.includes(item.data.key);
           if(!this.resultasas){
             for (var x in item.data) {
               this.tepjson[x] = item.data[x];
             }
-            this.myDiagram.model.addNodeData({ category: this.tepjson?.category, color: this.tepjson.color, group: groupTo, key: this.tepjson.key, primary_key: new_key, text: this.tepjson.text, finder:this.tepjson.finder })
+            // this.linkDataArray = [
+            //   // { from: 3, to: 4 },
+            //   // { from: 8, to: 9, },
+            // ];
+            this.myDiagram.model.addNodeData({ category: this.tepjson?.category, color: this.tepjson.color, group: groupTo, key: this.tepjson.key, primary_key: new_key, text: this.tepjson.text, foreign_key:this.tepjson.key });
+            keyArray.push(this.tepjson.key)
+            console.log('member de', to.memberParts)
+             
             this.resultasas = false
           }
           
-
-          // prop_primary.push(this.tepjson);
-          // pks.push(item.data.title);
-          // keys.push(item.data.key);
-          // dt_type.push(item.data.DT_type);
         }
         this.nodeDataArray
         
 
       }
+      var itTo = to.memberParts
+      // itOn.Wf.Pb.forEach((element, index) => {
+      //   var itemToNew = element.value.data
+      //   if (itemToNew.primary_key == "FK") {
+      //           (this.myDiagram.model as go.GraphLinksModel).addLinkData( { from: this.tepjson.key, to: itemToNew.data.key})          
+      //       }
+      // });
+      
+      Object.keys( itTo.Wf.Pb).forEach((key, i) => {
+        var itemToNew = itTo.Wf.Pb[key].value.data
+        Object.keys( it.Wf.Pb).forEach((keyO, iO) => {
+          var itemfromNew = it.Wf.Pb[keyO].value.data
+          if(itemToNew.foreign_key != undefined && itemToNew.foreign_key === itemfromNew.key && itemToNew.primary_key == "FK"){
+            (this.myDiagram.model as go.GraphLinksModel).addLinkData( { from: keyArray[iO], to: itemToNew.key, color:'transparent'})          
 
-      // //console.log(e.subject);
+          }
 
+        });
+      });
 
+      // while (itTo.next()) {
+      //   counter++
+      //   var itemTo = itTo.value;
+        
+      //   if (itemTo.data.primary_key == "FK" && counter === 1) {
+      //       (this.myDiagram.model as go.GraphLinksModel).addLinkData( { from: this.tepjson.key, to: itemTo.data.key, visible:false })          
+
+          
+      //   }
+        // this.nodeDataArray
+        
+
+      // } 
+
+     
+    // }
     }
     );
     this.myDiagram.addDiagramListener('SelectionDeleting', (e) => {
@@ -576,7 +560,7 @@ export class AppComponent {
         var item = itr.value;
         console.log('partitem',item)
         if (item) {
-          if(item.data.finder){
+          if(item.data.key){
             deletionListFromNode.push(item.data)
             this.deleteFromNode(deletionListFromNode)
 
@@ -587,82 +571,7 @@ export class AppComponent {
       if (deletionList.length > 0) {
         this.deleteNode(deletionList, itr, e)
       } 
-      // else 
-      // {
-      //   var iter = e.subject.iterator;
-      //   while (iter.next()) {
-      //     var item = iter.value;
-      //     if (item instanceof go.Link) {
-      //       this.removeChildLinks(item, e)
-      //     } else {
-
-
-      //       let itrOutOf = item.findLinksOutOf();
-      //       while (itrOutOf.next()) {
-
-      //         var items = itrOutOf.value;
-      //         this.removeChildLinks(items, e)
-      //       }
-
-      //     }
-
-      //     // if (item instanceof go.Node) {
-      //     //   if (this.insertedProperties.length > 0) {
-      //     //     for (let j = this.insertedProperties.length - 1; j >= 0; j--) {
-      //     //       if (this.insertedProperties[j]['stem_id'] == item.data['key']) {
-      //     //         this.insertedProperties.splice(j, 1);
-
-      //     //       }
-      //     //     }
-      //     //   }
-
-
-      //     // }
-      //   }
-
-
-      //   let itrDeleted = this.myDiagram.findLinksByExample({ "deleted": true })
-      //   while (itrDeleted.next()) {
-      //     var link = itrDeleted.value;
-      //     this.myDiagram.remove(link)
-      //   }
-      // }
-      // for (let i in localList) {
-      //   var item = localList[i];
-      //   if (item instanceof go.Link) {
-      //     this.removeChildLinks(item, e)
-      //   } else {
-
-
-      //     let itrOutOf = item.findLinksOutOf();
-      //     while (itrOutOf.next()) {
-
-      //       var items = itrOutOf.value;
-      //       this.removeChildLinks(items, e)
-      //     }
-
-      //   }
-        // }
-
-        // let itrDeleted = this.diagram.findLinksByExample({ "deleted": true })
-        // while (itrDeleted.next()) {
-        //   var link = itrDeleted.value;
-        //   this.diagram.remove(link)
-        // }
-
-
-
-        //     e.subject.each(function(part) {
-        //              if (part instanceof go.Link ) {
-
-        //               templateFunctions.removeChildLinks(part,e)
-
-        //              }})
-
-
-
-
-      // }
+  
     })
 
 
@@ -675,27 +584,10 @@ export class AppComponent {
 
         properties: {
           "text": {},
-          // key would be automatically added for nodes, but we want to declare it read-only also:
           "key": { readOnly: true, show: Inspector.showIfPresent },
-          // color would be automatically added for nodes, but we want to declare it a color also:
           "color": { show: Inspector.showIfPresent, type: 'color' },
-          // Comments and LinkComments are not in any node or link data (yet), so we add them here:
-          // "Comments": { show: Inspector.showIfNode },
-          // "LinkComments": { show: Inspector.showIfLink },
           "isGroup": { readOnly: true, show: Inspector.showIfPresent },
-          "primary_key": { show: Inspector.showIfPresent },
-          // "flag": { show: Inspector.showIfNode, type: 'checkbox' },
-          // "state": {
-          //   show: Inspector.showIfNode,
-          //   type: "select",
-          //   choices: function(node, propName) {
-          //     if (Array.isArray(node.data.choices)) return node.data.choices;
-          //     return ["one", "two", "three", "four", "five"];
-          //   }
-          // },
-          // "choices": { show: false },  // must not be shown at all
-          // an example of specifying the  type
-          // "password": { show: Inspector.showIfPresent, type: 'password' }
+          "primary_key": {  },
         }
       });
   }
@@ -734,7 +626,7 @@ export class AppComponent {
       while(it.next()){
         var item = it.value;
         var item = item.data;
-        if(itemFromData.finder === item.finder && item.primary_key == 'FK'){
+        if(itemFromData.key === item.foreign_key && item.primary_key == 'FK'){
           var itemKey = item.key
           let newDataFind =   this.myDiagram.findNodeForKey( itemKey) as any;
           this.nodeDataArray
@@ -751,6 +643,7 @@ export class AppComponent {
     });
   }
   checkConnectedTo:any;
+  
   deleteFromNode(list) {
     list.forEach((element, i) => {
       var itemNew = list[i]
@@ -765,7 +658,7 @@ export class AppComponent {
         while (itTo.next()) {
           var itemTo = itTo.value
           var itemFromData = itemTo.data
-          if(itemFromData.finder === itemNew.finder ){
+          if(itemFromData.foreign_key === itemNew.key ){
             var itemKey = itemFromData.key
             let newDataFind =   this.myDiagram.findNodeForKey( itemKey) as any;
             this.myDiagram.startTransaction();
@@ -776,7 +669,7 @@ export class AppComponent {
       });
       
       
-      // if(itemNew.finder === item.finder && item.primary_key == 'FK'){
+      // if(itemNew.foreign_key === item.foreign_key && item.primary_key == 'FK'){
       //   var itemKey = item.key
         let newDataFind =   this.myDiagram.findNodeForKey( itemNew.key) as any;
         this.nodeDataArray
@@ -784,26 +677,6 @@ export class AppComponent {
         this.myDiagram.remove(newDataFind);
         this.myDiagram.commitTransaction();
   
-      //  }
-
-
-      // while (itFrom.next()) {
-      //   let newData =   this.myDiagram.findNodeForKey( itemNew.to) as any;
-      //   var it = newData.memberParts;
-      //   var itemFrom = itFrom.value
-      //   var itemFromData = itemFrom.data
-       
-      // while(it.next()){
-      //   var item = it.value;
-      //   var item = item.data;
-       
-      //   }
-      // }
-
-     
-      //  if (item.primary_key == "FK") {
-       
-      // }
     });
       
 
@@ -828,12 +701,8 @@ highlightGroup(e: any, grp: any, show: any) {
   if (!grp) return;
   e.handled = true;
   if (show) {
-    // cannot depend on the grp.diagram.selection in the case of external drag-and-drops;
-    // instead depend on the DraggingTool.draggedParts or .copiedParts
     var tool = grp.diagram.toolManager.draggingTool;
     var map = tool.draggedParts || tool.copiedParts;
-    // this is a Map
-    // now we can check to see if the Group will accept membership of the dragged Parts
     if (grp.canAddMembers(map.toKeySet())) {
       grp.isHighlighted = true;
       return;
@@ -879,12 +748,6 @@ linkOnKey(fromnode: any, fromport: any, tonode: any, toport: any) {
 }
 
 
-keyMake(fromnode: any, fromport: any, tonode: any, toport: any) {
-  if (fromnode.node.primary_key === 'PK') {
-    tonode.node.color = '#000'
-  }
-
-}
 
 getNode() {
   this.GojsServiceService.getNode().subscribe((res: any) => {
