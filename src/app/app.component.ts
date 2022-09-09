@@ -20,7 +20,7 @@ export class AppComponent {
   getNodeArray: any;
   linkDataArray: any;
   insertedProperties = [];
-  resultasas:boolean = false;
+  resultasas: boolean = false;
   nodeArray = new Array<any>();
   ngOnInit() {
     const $ = go.GraphObject.make;
@@ -166,7 +166,7 @@ export class AppComponent {
         .add(new go.Panel("Auto", { stretch: go.GraphObject.Fill })
 
           .add(new go.Shape("RoundedHalfRectangle", {
-            fill: "rgb(0,189,255)", stroke: "rgb(0,189,255)", stretch: go.GraphObject.Fill, desiredSize: new go.Size(180, 15), strokeJoin: "miter", strokeWidth: 3
+            fill: "lightgreen", stroke: "lightgreen", stretch: go.GraphObject.Fill, desiredSize: new go.Size(180, 15), strokeJoin: "miter", strokeWidth: 3
 
           }
           )
@@ -182,7 +182,7 @@ export class AppComponent {
               font: this.defaultFont(true),
               opacity: 1,
               stroke: "#fff",
-              alignment: go.Spot.Right,
+              alignment: go.Spot.Left,
 
             })
             .bind("text", "text", null, null))
@@ -192,7 +192,7 @@ export class AppComponent {
             margin: 2,
             name: "helo",
 
-            alignment: go.Spot.Left,
+            alignment: go.Spot.Right,
             click: function (e, obj: any) {
 
               var shape = obj.part.findObject("helo");
@@ -308,10 +308,6 @@ export class AppComponent {
               cursor: "pointer",
               fromLinkable: true,
               toLinkable: true,
-              // fromLinkableSelfNode: false,
-              // toLinkableSelfNode: false,
-              // fromLinkableDuplicates: true,
-              // toLinkableDuplicates: true
             })
               .bind("fill", "color")
             )
@@ -324,7 +320,7 @@ export class AppComponent {
                 alignment: go.Spot.Left,
               })
               .bind(new go.Binding("text").makeTwoWay())
-              .bind('text', 'PK'))
+              )
           )
           .add(new go.Panel("Auto", { background: "#fff" })
             .add(new go.Shape("Rectangle", {
@@ -346,6 +342,78 @@ export class AppComponent {
               })
               .bind('text', 'primary_key'))
           )
+          .add(new go.Panel("Auto", { background: "yellow" })
+          .add(new go.Shape("Rectangle", {
+            fill: null,
+            stroke: null,
+            width: 18,
+            height: 20,
+            alignment: go.Spot.Right
+          })
+            .bind("fill", "yellow")
+          )
+          .add(new go.TextBlock(
+            {
+              margin: 3,
+              editable: true,
+              font: "6px sans-serif",
+              height: 10,
+              alignment: go.Spot.Left,
+            })
+            .bind('text', 'not_null',function(s) { return s ? "NN" : "NULL"}))
+        )
+        .add(new go.Panel("Auto", { background: "#CCC" })
+        .add(new go.Shape("Rectangle", {
+          fill: null,
+          stroke: null,
+          width: 18,
+          height: 20,
+          alignment: go.Spot.Right
+        })
+          .bind("fill", "yellow")
+        )
+        .add(new go.TextBlock(
+          {
+            margin: 3,
+            editable: true,
+            font: "6px sans-serif",
+            height: 10,
+            alignment: go.Spot.Left,
+          })
+          .bind('text', 'unique',function(s) { return s ? "U " : "NU"}))
+      )
+      .add(new go.Panel("Auto", { background: "pink" })
+        .add(new go.Shape("Rectangle", {
+          fill: null,
+          stroke: null,
+          width: 25,
+          height: 20,
+          alignment: go.Spot.Right
+        })
+          .bind("fill", "yellow")
+        )
+        .add(new go.TextBlock(
+          {
+            margin: 3,
+            editable: true,
+            font: "6px sans-serif",
+            height: 10,
+            alignment: go.Spot.Left,
+          })
+          .bind('text', 'data_type',function(s) { 
+              if(s === 'int'){
+                return "N#"
+              } else if( s === 'string') {
+                return "S"
+              } else if( s === 'boolean') {
+                return "B"
+              }
+              else  {
+                return "No Type"
+              }
+           
+          }))
+            )
         )
 
     var detailedNew = new go.Node("Auto",
@@ -431,13 +499,13 @@ export class AppComponent {
       $(go.Shape,
         { strokeWidth: 2 },
         new go.Binding("stroke", "color")),
-        
+
     ),
 
-    this.linkDataArray = [
-      // { from: 3, to: 4 },
-      // { from: 8, to: 9, },
-    ];
+      this.linkDataArray = [
+        // { from: 3, to: 4 },
+        // { from: 8, to: 9, },
+      ];
 
     this.myPalette = new go.Palette("myPaletteDiv",
       {
@@ -446,10 +514,10 @@ export class AppComponent {
       });
 
     this.myPalette.model = new go.GraphLinksModel([
-      { isGroup: true, text: "H Group", horiz: true, category: "simpleGroup" },
-      { isGroup: true, text: "H Group", horiz: true, category: "detailedGroup" },
-      { text: "New Node", color: "white", category: "detailed" },
-      { text: "New Node", color: "white", category: "simple" }
+      { isGroup: true, text: "Schema", horiz: true, category: "simpleGroup", isSchema: true },
+      { isGroup: true, text: "Entity", horiz: true, category: "detailedGroup", isEntity: true },
+      { text: "Attribute", color: "#fff", category: "simple" },
+      // { text: "New Node", color: "white", category: "simple" }
     ]);
 
 
@@ -457,12 +525,19 @@ export class AppComponent {
     this.myDiagram.toolManager.relinkingTool.linkValidation = this.sameGroup;
 
     this.nodeDataArray = [
-      { key: 3, text: "Gamma", color: "lightgreen", isGroup: true, category: "detailedGroup"},
-      { key: 4, text: "Delta", color: "grey", isGroup: true, category: "simpleGroup" },
-      { key: 5, text: "node1", color: "pink", group: 3, category: "simple", primary_key: 'PK' },
-      { key: 6, text: "node99", color: "orange", group: 3, category: "simple", primary_key: 'PK' },
-      { key: 30, text: "Gamma", color: "lightgreen", isGroup: true, category: "detailedGroup" },
-      { key: 50, text: "node1", color: "red", group: 30, category: "simple", primary_key: 'PK' },
+      { key: 3, isGroup: true, text: "Schema", category: "simpleGroup", isSchema: true },
+      { key: 4, isGroup: true, group: 3, text: "Entity", category: "detailedGroup", isEntity: true },
+      { key: 5, text: "Attribute", color: "#fff", group: 4, category: "simple", primary_key: "PK", not_null:true, unique:true, data_type:'int' },
+
+      { key: 13, isGroup: true, text: "Schema", category: "simpleGroup", isSchema: true },
+      { key: 14, isGroup: true, group: 13, text: "Entity", category: "detailedGroup", isEntity: true },
+      { key: 15, text: "Attribute", color: "#fff", group: 4, category: "simple" },
+      // { key: 3, text: "Gamma", color: "lightgreen", isGroup: true, category: "detailedGroup"},
+      // { key: 4, text: "Delta", color: "grey", isGroup: true, category: "simpleGroup" },
+      // { key: 5, text: "node1", color: "pink", group: 3, category: "simple", primary_key: 'PK' },
+      // { key: 6, text: "node99", color: "orange", group: 3, category: "simple", primary_key: 'PK' },
+      // { key: 30, text: "Gamma", color: "lightgreen", isGroup: true, category: "detailedGroup" },
+      // { key: 50, text: "node1", color: "red", group: 30, category: "simple", primary_key: 'PK' },
     ];
 
     this.myDiagram.animationManager.isEnabled = false;
@@ -486,32 +561,35 @@ export class AppComponent {
       var it = from.memberParts;
       var itOn = from.memberParts;
       var keyArray = []
-      while (it.next()) {
-        var item = it.value;
-        fromKeyAtt = item.data.key
-        
-        if (item.data.primary_key == "PK") {
-          var new_key = 'FK'
-          if(!this.resultasas){
-            for (var x in item.data) {
-              this.tepjson[x] = item.data[x];
-            }
-            // this.linkDataArray = [
-            //   // { from: 3, to: 4 },
-            //   // { from: 8, to: 9, },
-            // ];
-            this.myDiagram.model.addNodeData({ category: this.tepjson?.category, color: this.tepjson.color, group: groupTo, key: this.tepjson.key, primary_key: new_key, text: this.tepjson.text, foreign_key:this.tepjson.key });
-            keyArray.push(this.tepjson.key)
-            console.log('member de', to.memberParts)
-             
-            this.resultasas = false
-          }
-          
-        }
-        this.nodeDataArray
-        
+      if (it != undefined) {
+        while (it.next()) {
+          var item = it.value;
+          fromKeyAtt = item.data.key
 
+          if (item.data.primary_key == "PK") {
+            var new_key = 'FK'
+            if (!this.resultasas) {
+              for (var x in item.data) {
+                this.tepjson[x] = item.data[x];
+              }
+              // this.linkDataArray = [
+              //   // { from: 3, to: 4 },
+              //   // { from: 8, to: 9, },
+              // ];
+              this.myDiagram.model.addNodeData({ category: this.tepjson?.category, color: this.tepjson.color, group: groupTo, key: this.tepjson.key, primary_key: new_key, text: this.tepjson.text, foreign_key: this.tepjson.key });
+              keyArray.push(this.tepjson.key)
+              console.log('member de', to.memberParts)
+
+              this.resultasas = false
+            }
+
+          }
+          this.nodeDataArray
+
+
+        }
       }
+
       var itTo = to.memberParts
       // itOn.Wf.Pb.forEach((element, index) => {
       //   var itemToNew = element.value.data
@@ -519,35 +597,37 @@ export class AppComponent {
       //           (this.myDiagram.model as go.GraphLinksModel).addLinkData( { from: this.tepjson.key, to: itemToNew.data.key})          
       //       }
       // });
-      
-      Object.keys( itTo.Wf.Pb).forEach((key, i) => {
-        var itemToNew = itTo.Wf.Pb[key].value.data
-        Object.keys( it.Wf.Pb).forEach((keyO, iO) => {
-          var itemfromNew = it.Wf.Pb[keyO].value.data
-          if(itemToNew.foreign_key != undefined && itemToNew.foreign_key === itemfromNew.key && itemToNew.primary_key == "FK"){
-            (this.myDiagram.model as go.GraphLinksModel).addLinkData( { from: keyArray[iO], to: itemToNew.key, color:'transparent'})          
+      if (itTo != undefined) {
+        Object.keys(itTo.Wf.Pb).forEach((key, i) => {
+          var itemToNew = itTo.Wf.Pb[key].value.data
+          Object.keys(it.Wf.Pb).forEach((keyO, iO) => {
+            var itemfromNew = it.Wf.Pb[keyO].value.data
+            if (itemToNew.foreign_key != undefined && itemToNew.foreign_key === itemfromNew.key && itemToNew.primary_key == "FK") {
+              (this.myDiagram.model as go.GraphLinksModel).addLinkData({ from: keyArray[iO], to: itemToNew.key, color: 'transparent' })
 
-          }
+            }
 
+          });
         });
-      });
+      }
+
 
       // while (itTo.next()) {
       //   counter++
       //   var itemTo = itTo.value;
-        
+
       //   if (itemTo.data.primary_key == "FK" && counter === 1) {
       //       (this.myDiagram.model as go.GraphLinksModel).addLinkData( { from: this.tepjson.key, to: itemTo.data.key, visible:false })          
 
-          
+
       //   }
-        // this.nodeDataArray
-        
+      // this.nodeDataArray
+
 
       // } 
 
-     
-    // }
+
+      // }
     }
     );
     this.myDiagram.addDiagramListener('SelectionDeleting', (e) => {
@@ -558,24 +638,34 @@ export class AppComponent {
       // let localList = []
       while (itr.next()) {
         var item = itr.value;
-        console.log('partitem',item)
+        console.log('partitem', item)
         if (item) {
-          if(item.data.key){
+          if (item.data.key) {
             deletionListFromNode.push(item.data)
             this.deleteFromNode(deletionListFromNode)
 
           }
           deletionList.push(item.data)
-        } 
+        }
       }
       if (deletionList.length > 0) {
         this.deleteNode(deletionList, itr, e)
-      } 
-  
+      }
+
     })
+ 
+    this.myDiagram.addDiagramListener('BackgroundSingleClicked', (e) => {
 
+      console.log(e)
+    
 
+    })
+    this.myDiagram.addDiagramListener('GainedFocus', (e) => {
 
+      console.log(e)
+    
+
+    })
     new Inspector('myInspector', this.myDiagram,
       {
         multipleSelection: true,
@@ -587,7 +677,10 @@ export class AppComponent {
           "key": { readOnly: true, show: Inspector.showIfPresent },
           "color": { show: Inspector.showIfPresent, type: 'color' },
           "isGroup": { readOnly: true, show: Inspector.showIfPresent },
-          "primary_key": {  },
+          "primary_key": {},
+          "not_null": {},
+          "unique": {},
+          "data_type": {},
         }
       });
   }
@@ -614,146 +707,195 @@ export class AppComponent {
   deleteNode(list, itr, e) {
     list.forEach((element, i) => {
       var itemNew = list[i]
-      let newDataTo =   this.myDiagram.findNodeForKey( itemNew.from) as any;
-      var itFrom = newDataTo.memberParts;
-     
-      while (itFrom.next()) {
-        let newData =   this.myDiagram.findNodeForKey( itemNew.to) as any;
-        var it = newData.memberParts;
-        var itemFrom = itFrom.value
-        var itemFromData = itemFrom.data
-       
-      while(it.next()){
-        var item = it.value;
-        var item = item.data;
-        if(itemFromData.key === item.foreign_key && item.primary_key == 'FK'){
-          var itemKey = item.key
-          let newDataFind =   this.myDiagram.findNodeForKey( itemKey) as any;
-          this.nodeDataArray
-          this.myDiagram.startTransaction();
-          this.myDiagram.remove(newDataFind);
-          this.myDiagram.commitTransaction();
-    
-         }
+      let newDataTo = this.myDiagram.findNodeForKey(itemNew.from) as any;
+      if (newDataTo != null) {
+        var itFrom = newDataTo.memberParts;
+        if (itFrom != undefined) {
+          while (itFrom.next()) {
+            let newData = this.myDiagram.findNodeForKey(itemNew.to) as any;
+            var it = newData.memberParts;
+            var itemFrom = itFrom.value
+            var itemFromData = itemFrom.data
+
+            while (it.next()) {
+              var item = it.value;
+              var item = item.data;
+              if (itemFromData.key === item.foreign_key && item.primary_key == 'FK') {
+                var itemKey = item.key
+                let newDataFind = this.myDiagram.findNodeForKey(itemKey) as any;
+                this.nodeDataArray
+                this.myDiagram.startTransaction();
+                this.myDiagram.remove(newDataFind);
+                this.myDiagram.commitTransaction();
+
+              }
+            }
+          }
         }
       }
+
+
+
       //  if (item.primary_key == "FK") {
-       
+
       // }
     });
   }
-  checkConnectedTo:any;
-  
+  checkConnectedTo: any;
+
   deleteFromNode(list) {
     list.forEach((element, i) => {
       var itemNew = list[i]
-      let newDatafrom =   this.myDiagram.findNodeForKey( itemNew.group) as any;
-      var itFrom = newDatafrom.memberParts;
-      console.log(newDatafrom)
-      let linkConnected = newDatafrom.linksConnected.xb.s.forEach(element => {
-        let checkConnectedFrom = element.data.from
-        this.checkConnectedTo = element.data.to
-        let newDataTo =   this.myDiagram.findNodeForKey( this.checkConnectedTo) as any;
-        var itTo = newDataTo.memberParts;
-        while (itTo.next()) {
-          var itemTo = itTo.value
-          var itemFromData = itemTo.data
-          if(itemFromData.foreign_key === itemNew.key ){
-            var itemKey = itemFromData.key
-            let newDataFind =   this.myDiagram.findNodeForKey( itemKey) as any;
-            this.myDiagram.startTransaction();
-            this.myDiagram.remove(newDataFind);
-            this.myDiagram.commitTransaction();
-           }
-          }
-      });
-      
-      
+      let newDatafrom = this.myDiagram.findNodeForKey(itemNew.group) as any;
+      if (newDatafrom != null) {
+        var itFrom = newDatafrom.memberParts;
+        if (newDatafrom.linksConnected.count > 0) {
+          let linkConnected = newDatafrom.linksConnected.xb.s.forEach(element => {
+            let checkConnectedFrom = element.data.from
+            this.checkConnectedTo = element.data.to
+            let newDataTo = this.myDiagram.findNodeForKey(this.checkConnectedTo) as any;
+            var itTo = newDataTo.memberParts;
+            while (itTo.next()) {
+              var itemTo = itTo.value
+              var itemFromData = itemTo.data
+              if (itemFromData.foreign_key === itemNew.key) {
+                var itemKey = itemFromData.key
+                let newDataFind = this.myDiagram.findNodeForKey(itemKey) as any;
+                this.myDiagram.startTransaction();
+                this.myDiagram.remove(newDataFind);
+                this.myDiagram.commitTransaction();
+              }
+            }
+          });
+        }
+      }
+
+
+
+
       // if(itemNew.foreign_key === item.foreign_key && item.primary_key == 'FK'){
       //   var itemKey = item.key
-        let newDataFind =   this.myDiagram.findNodeForKey( itemNew.key) as any;
-        this.nodeDataArray
-        this.myDiagram.startTransaction();
-        this.myDiagram.remove(newDataFind);
-        this.myDiagram.commitTransaction();
-  
+      let newDataFind = this.myDiagram.findNodeForKey(itemNew.key) as any;
+      this.nodeDataArray
+      this.myDiagram.startTransaction();
+      this.myDiagram.remove(newDataFind);
+      this.myDiagram.commitTransaction();
+
     });
-      
-
-
-  } 
 
 
 
+  }
 
 
 
-showMessage(s: any) {
-  this.nodeInspector = []
-  this.nodeInspector.push(s)
-}
-finishDrop(e: any, grp: any) {
-  var ok = (grp !== null ? grp.addMembers(grp.diagram.selection, true) : e.diagram.commandHandler.addTopLevelParts(e.diagram.selection, true));
-  if (!ok) e.diagram.currentTool.doCancel();
-}
 
-highlightGroup(e: any, grp: any, show: any) {
-  if (!grp) return;
-  e.handled = true;
-  if (show) {
-    var tool = grp.diagram.toolManager.draggingTool;
-    var map = tool.draggedParts || tool.copiedParts;
-    if (grp.canAddMembers(map.toKeySet())) {
-      grp.isHighlighted = true;
-      return;
+
+
+  showMessage(s: any) {
+    this.nodeInspector = []
+    this.nodeInspector.push(s)
+  }
+  finishDrop(e: any, grp: any) {
+
+    if (grp !== null) {
+      if (grp.If != "detailedGroup") {
+        if (grp.If === 'simpleGroup' && e.diagram.selection.Xe.key.If === "simple") {
+          e.diagram.currentTool.doCancel()
+        } else if(grp.If === 'simpleGroup' && e.diagram.selection.Xe.key.If === "simpleGroup"){
+          e.diagram.currentTool.doCancel()
+        }
+        else{
+          grp.addMembers(grp.diagram.selection, true)
+
+        }
+
+      } else if (grp.If === "detailedGroup" && e.diagram.selection.Xe.key.If === "simple") {
+        grp.addMembers(grp.diagram.selection, true)
+
+      }
+      else {
+        e.diagram.currentTool.doCancel()
+
+      }
+      // if(grp.If === grp.diagram.selection.Xe.key.If){
+      // { isGroup: true, text: "Schema", horiz: true, category: "simpleGroup" , isSchema: true},
+      // { isGroup: true, text: "Entity", horiz: true, category: "detailedGroup", isEntity: true },
+      // { text: "Attribute", color: "#fff", category: "simple" },
+      // }
+    } else if (e.diagram.selection.Xe.key.If === "detailedGroup") {
+      e.diagram.currentTool.doCancel()
+    }
+    else if (e.diagram.selection.Xe.key.If == 'simple') {
+      e.diagram.currentTool.doCancel()
+    }
+    else {
+      e.diagram.commandHandler.addTopLevelParts(e.diagram.selection, true)
+    }
+
+    // var ok = (grp !== null ? grp.addMembers(grp.diagram.selection, true) : e.diagram.commandHandler.addTopLevelParts(e.diagram.selection, true));
+    // if (!ok) e.diagram.currentTool.doCancel();
+  }
+
+  highlightGroup(e: any, grp: any, show: any) {
+    if (!grp) return;
+    e.handled = true;
+    if (show) {
+      var tool = grp.diagram.toolManager.draggingTool;
+      var map = tool.draggedParts || tool.copiedParts;
+      if (grp.canAddMembers(map.toKeySet())) {
+        grp.isHighlighted = true;
+        return;
+      }
+    }
+    grp.isHighlighted = false;
+  }
+
+  defaultColor(horiz: any) {
+    return horiz ? "rgb(0, 189, 255)" : "rgb(0, 189, 255)";
+  }
+  defaultFont(horiz: any) {
+    return horiz ? "12px sans-serif" : "bold 12px sans-serif";
+  }
+
+  makeLayout(horiz: any) {
+    if (horiz) {
+      return new go.GridLayout(
+        {
+          wrappingWidth: 1, alignment: go.GridLayout.Position,
+          cellSize: new go.Size(1, 1), spacing: new go.Size(4, 4)
+        });
+    } else {
+      return new go.GridLayout(
+        {
+          wrappingColumn: 1, alignment: go.GridLayout.Position,
+          cellSize: new go.Size(1, 1), spacing: new go.Size(4, 4)
+        });
     }
   }
-  grp.isHighlighted = false;
-}
 
-defaultColor(horiz: any) {
-  return horiz ? "rgb(0, 189, 255)" : "rgb(0, 189, 255)";
-}
-defaultFont(horiz: any) {
-  return horiz ? "12px sans-serif" : "bold 12px sans-serif";
-}
-
-makeLayout(horiz: any) {
-  if (horiz) {
-    return new go.GridLayout(
-      {
-        wrappingWidth: 1, alignment: go.GridLayout.Position,
-        cellSize: new go.Size(1, 1), spacing: new go.Size(4, 4)
-      });
-  } else {
-    return new go.GridLayout(
-      {
-        wrappingColumn: 1, alignment: go.GridLayout.Position,
-        cellSize: new go.Size(1, 1), spacing: new go.Size(4, 4)
-      });
+  linkInfo(d: any) {
+    return "Link:\nfrom " + d.from + " to " + d.to;
   }
-}
 
-linkInfo(d: any) {
-  return "Link:\nfrom " + d.from + " to " + d.to;
-}
-
-sameGroup(fromnode: any, fromport: any, tonode: any, toport: any) {
-  return fromnode.data.isGroup === tonode.data.isGroup;
-
-}
-linkOnKey(fromnode: any, fromport: any, tonode: any, toport: any) {
-  return fromnode.data.isGroup === tonode.data.isGroup;
-
-}
+  sameGroup(fromnode: any, fromport: any, tonode: any, toport: any) {
+   if(fromnode.data.isSchema === tonode.data.isSchema && fromnode.data.category != 'simpleGroup' && fromnode.data.category != 'simple' && tonode.data.category != 'simple' ){
+     return true 
+    }else{
+      return false
+    }
+  }
+  // { key: 13, isGroup: true, text: "Schema", category: "simpleGroup", isSchema: true },
+  //     { key: 14, isGroup: true, group: 13, text: "Entity", category: "detailedGroup", isEntity: true },
+  //     { key: 15, text: "Attribute", color: "#fff", group: 4, category: "simple" },
 
 
 
-getNode() {
-  this.GojsServiceService.getNode().subscribe((res: any) => {
-    this.getNodeArray = res;
-  })
+  getNode() {
+    this.GojsServiceService.getNode().subscribe((res: any) => {
+      this.getNodeArray = res;
+    })
 
-}
+  }
 
 }
